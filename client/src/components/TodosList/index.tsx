@@ -11,15 +11,15 @@ export default function TodosList() {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        margin: "0 auto",
+        margin: "20px",
       }}
     >
-      <Button color="primary">
-        Add <AddIcon />
+      <Button color="primary" variant="contained" sx={{minWidth: "200px", margin: "20px 0"}} >
+        Add Todo<AddIcon />
       </Button>
-      <List>
+      <List sx={{ width: '100%', maxWidth: "400px" }}>
         {Array.from(Array(6)).map((_, index) => (
-          <ListItem>
+          <ListItem sx={{ width: '100%'}}>
             <Todo />
           </ListItem>
         ))}

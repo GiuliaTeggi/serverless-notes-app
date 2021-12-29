@@ -4,9 +4,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Todo() {
   return (
-    <Card>
-      <CardContent sx={{ display: "flex" }}>
-        <Typography variant="body1">My todo text</Typography>
+    <Card sx={{ width: '100%'}}>
+      <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography variant="body1" sx={{ flexGrow: "1"}}>My todo text</Typography>
         <Button aria-label="delete" color="warning">
           <DeleteIcon />
         </Button>
