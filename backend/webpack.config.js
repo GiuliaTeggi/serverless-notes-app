@@ -1,5 +1,7 @@
 const path = require('path');
+const webpack = require("webpack");
 const slsw = require('serverless-webpack');
+require('dotenv').config();
 // var nodeExternals = require('webpack-node-externals')
 
 module.exports = {
@@ -22,4 +24,9 @@ module.exports = {
       { test: /\.tsx?$/, loader: 'ts-loader', options: { transpileOnly: true } },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.CERT": JSON.stringify(process.env.CERT)
+  })
+  ]
 };
