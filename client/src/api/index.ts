@@ -1,10 +1,9 @@
 import Axios from "axios";
 import Todo from "../models/Todo";
-import { apiEndpoint } from "../config";
 
 export async function getTodos(idToken: string): Promise<Todo[]> {
   console.log("Fetching todos");
-
+  const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
   const response = await Axios.get(`${apiEndpoint}/todos`, {
     headers: {
       "Content-Type": "application/json",
