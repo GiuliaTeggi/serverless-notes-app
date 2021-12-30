@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, List, ListItem, Button, CircularProgress } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import Todo from "../Todo";
+import TodoItem from "../TodoItem";
+import Todo from "../../models/Todo";
+import { useAuth0 } from "@auth0/auth0-react";
+import { getTodos } from '../../api'
 
 export default function TodosList() {
-  const [todos, setTodos] = useState([]);
+  const { getAccessTokenSilently } = useAuth0();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(()=> {
+    try {
+  const fetchTodos = async () => {
+    const token = await getAccessTokenSilently();
+    const todos = await getTodos(token)
+    setTodos(todos)
+    setLoading(false)
+  }
+      fetchTodos()
+    } catch (e: unknown) {
+      console.log(`Failed to fetch todos: ${e instanceof Error ? e.message : e}`)
+    }
+  }, [getAccessTokenSilently])
 
   const renderLoading = () => {
     return <CircularProgress sx={{ marginTop: "20px" }} />;
@@ -23,9 +41,9 @@ export default function TodosList() {
           <AddIcon />
         </Button>
         <List sx={{ width: "100%", maxWidth: "400px" }}>
-          {Array.from(Array(6)).map((_, index) => (
+          {todos.map((_, index) => (
             <ListItem sx={{ width: "100%" }}>
-              <Todo />
+              <TodoItem />
             </ListItem>
           ))}
         </List>

@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function Todo() {
+export default function TodoItem() {
   return (
     <Card sx={{ width: "100%" }}>
       <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
