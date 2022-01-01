@@ -1,15 +1,17 @@
-import React, { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppState, Auth0Provider } from '@auth0/auth0-react';
+import React, { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppState, Auth0Provider } from "@auth0/auth0-react";
 
 interface Auth0ProviderWithHistoryProps {
-    children: ReactNode
+  children: ReactNode;
 }
 
-const Auth0ProviderWithHistory = ({ children } : Auth0ProviderWithHistoryProps) => {
-    let navigate = useNavigate();
-  const domain = process.env.REACT_APP_AUTH0_DOMAIN || '';
-  const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID || '';
+const Auth0ProviderWithHistory = ({
+  children,
+}: Auth0ProviderWithHistoryProps) => {
+  let navigate = useNavigate();
+  const domain = process.env.REACT_APP_AUTH0_DOMAIN || "";
+  const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID || "";
   const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
 
   const onRedirectCallback = (appState: AppState) => {

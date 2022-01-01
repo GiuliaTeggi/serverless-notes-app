@@ -2,7 +2,7 @@ import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda';
 import { getUserId } from '../utils'
 import { createLogger } from '../../utils/logger'
-import { getAllTodos } from '../../database/query';
+import { getAllNotes } from '../../database/query';
 
 const logger = createLogger('getTodos')
 
@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   const userId = getUserId(event);
   logger.info('Getting todos', { userId: userId })
-  const items = await getAllTodos(userId)
+  const items = await getAllNotes(userId)
   logger.info('Get todos response', items)
 
   return {

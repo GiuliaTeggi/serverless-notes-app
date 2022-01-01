@@ -1,5 +1,5 @@
 service:
-  name: serverless-todo-app
+  name: serverless-notes-app
 
 plugins:
   - serverless-webpack
@@ -22,7 +22,7 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment:
-    TODOS_TABLE: TodosTable-${self:provider.stage}
+    NOTES_TABLE: NotesTable-${self:provider.stage}
     INDEX_NAME: secondaryIndex
   
 custom:
@@ -30,35 +30,62 @@ custom:
     api:
       info:
         version: v1.0.0
-        title: Serverless Todo App API 
-        description: Serverless Todo application
+        title: Serverless Notes App API 
+        description: Serverless notes application
     models:
-    - name: todoRequest
+    - name: noteRequest
       contentType: application/json
-      schema: ${file(models/create-todo-request.json)}
+      schema: ${file(models/createNoteRequest.json)}
 
 functions:
 
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
+  GetNotes:
+    handler: src/lambda/http/getNotes.handler
     events:
       - http:
           method: get
-          path: todos
+          path: notes
           cors: true
           allhods: GET
           authorizer: Auth
           documentation: 
-            summary: Get todos
-            description: Get todos
+            summary: Get notes
+            description: Get notes
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
+
+  CreateNote:
+    handler: src/lambda/http/createNote.handler
+    events:
+      - http:
+          method: post
+          path: notes
+          cors: true
+          allowedMethods: POST
+          authorizer: Auth
+          reqvalidatorName: RequestBodyValidator
+          documentation: 
+            summary: Create a new note
+            description: Create a new note
+            requestModels:
+              'application/json': noteRequest
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -88,23 +115,23 @@ resources:
         ValidateRequestBody: true
         ValidateRequestParameters: false
         
-    TodosDBTable:
+    NotesDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: todoId
+          - AttributeName: noteId
             AttributeType: S
           - AttributeName: dueDate
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoId
+          - AttributeName: noteId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE}
+        TableName: ${self:provider.environment.NOTES_TABLE}
         LocalSecondaryIndexes:
           - IndexName: ${self:provider.environment.INDEX_NAME}
             KeySchema:

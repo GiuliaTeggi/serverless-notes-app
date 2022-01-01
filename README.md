@@ -1,3 +1,3 @@
-# Serverless Todo App
+# Serverless Notes App
 
-A todo application with auth0 authentication built on AWS using the serverless framework.
+A notes application with auth0 authentication built on AWS using the serverless framework.

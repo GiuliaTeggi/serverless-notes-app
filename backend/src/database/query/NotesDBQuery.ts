@@ -2,22 +2,22 @@
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-import { TodoItem } from '../../models/TodoItem'
+import NoteItem from '../../models/NoteItem'
 
 const XAWS = AWSXRay.captureAWS(AWS)
 
-export class TodoDBQuery{
+export default class NotesDBQuery{
     private readonly docClient : DocumentClient;
-    private readonly todosTable;
+    private readonly notesTable;
     public readonly notificationTable;
     constructor(){
     this.docClient = new XAWS.DynamoDB.DocumentClient();
-    this.todosTable = process.env.TODOS_TABLE
+    this.notesTable = process.env.NOTES_TABLE
     }
 
-    async getAllTodos(userId: string): Promise<TodoItem[]>{
+    async getAllNotes(userId: string): Promise<NoteItem[]>{
     const result = await this.docClient.query({
-        TableName: this.todosTable, 
+        TableName: this.notesTable, 
         KeyConditionExpression: 'userId = :userId', 
         ExpressionAttributeValues: {
           ':userId': userId
@@ -25,6 +25,15 @@ export class TodoDBQuery{
       }).promise();
 
       const items = result.Items;
-      return items as TodoItem[]
+      return items as NoteItem[]
     }
+
+    async createNoteItem(note: NoteItem): Promise<NoteItem>{
+      await this.docClient.put({
+              TableName: this.notesTable,
+              Item: note
+              }).promise();
+      return note
+      }
+
 }

@@ -4,7 +4,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
 import { useAuth0 } from "@auth0/auth0-react";
