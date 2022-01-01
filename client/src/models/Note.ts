@@ -1,5 +1,5 @@
 export default interface Todo {
-  todoId: string;
+  noteId: string;
   createdAt: string;
   text: string;
   done: boolean;

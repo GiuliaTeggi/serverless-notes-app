@@ -31,14 +31,14 @@ export default function NotesList() {
     return <CircularProgress sx={{ marginTop: "20px" }} />;
   };
 
-  const renderTodos = () => {
+  const renderNotes = () => {
     return (
       <>
         <AddNoteItem notes={notes} setNotes={setNotes} />
         <List sx={{ width: "100%", maxWidth: "400px" }}>
           {notes.map((note, index) => (
             <ListItem sx={{ width: "100%" }} key={index}>
-              <NoteItem note={note} />
+              <NoteItem note={note} notes={notes} setNotes={setNotes}/>
             </ListItem>
           ))}
         </List>
@@ -56,7 +56,7 @@ export default function NotesList() {
         margin: "20px",
       }}
     >
-      {loading ? renderLoading() : renderTodos()}
+      {loading ? renderLoading() : renderNotes()}
     </Box>
   );
 }

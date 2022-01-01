@@ -92,6 +92,30 @@ functions:
           - xray:PutTelemetryRecords
         Resource:
           - "*"
+  
+  DeleteNote:
+    handler: src/lambda/http/deleteNote.handler
+    events:
+      - http:
+          method: delete
+          path: notes/{noteId}
+          cors: true
+          allowedMethods: DELETE
+          authorizer: Auth
+          documentation: 
+            summary: Delete a note
+            description: Delete a note
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
 
 resources:
   Resources:
@@ -122,8 +146,6 @@ resources:
           - AttributeName: userId
             AttributeType: S
           - AttributeName: noteId
-            AttributeType: S
-          - AttributeName: dueDate
             AttributeType: S
         KeySchema:
           - AttributeName: userId

@@ -3,6 +3,7 @@ import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import NoteItem from '../../models/NoteItem'
+import NoteDelete from '../../models/NoteDelete'
 
 const XAWS = AWSXRay.captureAWS(AWS)
 
@@ -36,4 +37,11 @@ export default class NotesDBQuery{
       return note
       }
 
+    async deleteNoteItem(note: NoteDelete): Promise<NoteDelete>{
+      await this.docClient.delete({
+          TableName: this.notesTable, 
+          Key: note
+      }).promise();
+      return note
+  }
 }
