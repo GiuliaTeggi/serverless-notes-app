@@ -2,7 +2,7 @@
 
 A note-taking application with auth0 authentication built on AWS using the serverless framework.
 
-I am building this app to learn more about serverless and AWS services.
+I am building this app to learn more about serverless and AWS services. I'm also trying out Material UI for the first time, so I can compare it to Semantic UI React which I have more experience with.
 
 🚧 Work in progress 🚧
 
